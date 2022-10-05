@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1jghrss" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+  <bpmn:process id="Scolarite-Inscription" name="Inscription" isExecutable="true" camunda:versionTag="Inscription">
+    <bpmn:endEvent id="EndEvent_0j97txi" name="Fin inscription cycle ingénieur">
+      <bpmn:incoming>SequenceFlow_17w5nfr</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="Task_1qgx3ke" name="Soumission formulaire cycle ingénieur" camunda:expression="#{printer.printMessageIng(execution)}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="niveau">${niveau}</camunda:inputParameter>
+          <camunda:inputParameter name="cin">${cin}</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0sqqg6j</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_17w5nfr</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Activity_05yc8j1" name="Remplir formulaire entrée" camunda:formKey="Formulaire entrée">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="cin" label="cin" type="string" />
+          <camunda:formField id="niveau" label="niveau" type="enum" defaultValue="Licence">
+            <camunda:value id="Licence" name="Licence" />
+            <camunda:value id="Ingenierie" name="Ingenierie" />
+          </camunda:formField>
+        </camunda:formData>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="niveau">${niveau}</camunda:outputParameter>
+          <camunda:outputParameter name="cin">${cin}</camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1cx6r7k</bpmn:incoming>
+      <bpmn:outgoing>Flow_13knisd</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:startEvent id="StartEvent_1" name="Se presenter a la scolarité" camunda:asyncAfter="true">
+      <bpmn:outgoing>Flow_1cx6r7k</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:exclusiveGateway id="Gateway_1x95dud" name="Verifier niveau">
+      <bpmn:incoming>Flow_13knisd</bpmn:incoming>
+      <bpmn:outgoing>ing</bpmn:outgoing>
+      <bpmn:outgoing>lsc</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="Activity_09bsysa" name="Soumission formulaire licence" camunda:expression="#{printer.printMessage(execution)} ">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="niveau">${niveau}</camunda:inputParameter>
+          <camunda:inputParameter name="cin">${cin}</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_17e4a7z</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ne31ed</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_1xo45kp" name="Fin inscription licence">
+      <bpmn:incoming>Flow_1ne31ed</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_17w5nfr" sourceRef="Task_1qgx3ke" targetRef="EndEvent_0j97txi" />
+    <bpmn:sequenceFlow id="Flow_1cx6r7k" sourceRef="StartEvent_1" targetRef="Activity_05yc8j1" />
+    <bpmn:sequenceFlow id="Flow_13knisd" sourceRef="Activity_05yc8j1" targetRef="Gateway_1x95dud" />
+    <bpmn:sequenceFlow id="Flow_1ne31ed" sourceRef="Activity_09bsysa" targetRef="Event_1xo45kp" />
+    <bpmn:sequenceFlow id="ing" name="ing" sourceRef="Gateway_1x95dud" targetRef="Activity_0e4hyoi">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${niveau=='Ingenierie'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0sqqg6j" sourceRef="Activity_0e4hyoi" targetRef="Task_1qgx3ke" />
+    <bpmn:sequenceFlow id="lsc" name="lsc" sourceRef="Gateway_1x95dud" targetRef="Activity_1i1g7cj">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{printer.verifLis(execution)}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_17e4a7z" sourceRef="Activity_1i1g7cj" targetRef="Activity_09bsysa" />
+    <bpmn:userTask id="Activity_0e4hyoi" name="Remplir formulaire cycle ingénieur" camunda:formKey="Etudiant Ingénieur">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="cin">${cin}</camunda:inputParameter>
+          <camunda:inputParameter name="niveau">${niveau}</camunda:inputParameter>
+          <camunda:outputParameter name="cin">${cin}</camunda:outputParameter>
+          <camunda:outputParameter name="niveau">${niveau}</camunda:outputParameter>
+        </camunda:inputOutput>
+        <camunda:formData>
+          <camunda:formField id="nom" label="nom" type="string" />
+          <camunda:formField id="prenom" label="prenom" type="string" />
+          <camunda:formField id="nbrAbs" label="nombre absences" type="string" />
+          <camunda:formField id="specialite" label="spécialité" type="string" />
+          <camunda:formField id="credit" label="crédit" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>ing</bpmn:incoming>
+      <bpmn:outgoing>Flow_0sqqg6j</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Activity_1i1g7cj" name="Remplir formulaire licence" camunda:formKey="Etudiant Licence">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="niveau">${niveau}</camunda:inputParameter>
+          <camunda:inputParameter name="cin">${cin}</camunda:inputParameter>
+          <camunda:outputParameter name="cin">${cin}</camunda:outputParameter>
+          <camunda:outputParameter name="niveau">${niveau}</camunda:outputParameter>
+        </camunda:inputOutput>
+        <camunda:formData>
+          <camunda:formField id="nom" label="nom" type="string" />
+          <camunda:formField id="prenom" label="prenom" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>lsc</bpmn:incoming>
+      <bpmn:outgoing>Flow_17e4a7z</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Scolarite-Inscription">
+      <bpmndi:BPMNEdge id="Flow_17e4a7z_di" bpmnElement="Flow_17e4a7z">
+        <di:waypoint x="640" y="250" />
+        <di:waypoint x="690" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11i4tg3_di" bpmnElement="lsc">
+        <di:waypoint x="460" y="195" />
+        <di:waypoint x="460" y="250" />
+        <di:waypoint x="540" y="250" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="468" y="220" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0sqqg6j_di" bpmnElement="Flow_0sqqg6j">
+        <di:waypoint x="640" y="110" />
+        <di:waypoint x="690" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1or7w1u_di" bpmnElement="ing">
+        <di:waypoint x="460" y="145" />
+        <di:waypoint x="460" y="110" />
+        <di:waypoint x="540" y="110" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="468" y="125" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ne31ed_di" bpmnElement="Flow_1ne31ed">
+        <di:waypoint x="790" y="250" />
+        <di:waypoint x="852" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13knisd_di" bpmnElement="Flow_13knisd">
+        <di:waypoint x="350" y="170" />
+        <di:waypoint x="435" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1cx6r7k_di" bpmnElement="Flow_1cx6r7k">
+        <di:waypoint x="198" y="170" />
+        <di:waypoint x="250" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_17w5nfr_di" bpmnElement="SequenceFlow_17w5nfr">
+        <di:waypoint x="790" y="110" />
+        <di:waypoint x="852" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_0j97txi_di" bpmnElement="EndEvent_0j97txi">
+        <dc:Bounds x="852" y="92" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="833" y="135" width="75" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_1qgx3ke_di" bpmnElement="Task_1qgx3ke">
+        <dc:Bounds x="690" y="70" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05yc8j1_di" bpmnElement="Activity_05yc8j1">
+        <dc:Bounds x="250" y="130" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="162" y="152" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="137" y="203" width="85" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1x95dud_di" bpmnElement="Gateway_1x95dud" isMarkerVisible="true">
+        <dc:Bounds x="435" y="145" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="365" y="133" width="70" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_09bsysa_di" bpmnElement="Activity_09bsysa">
+        <dc:Bounds x="690" y="210" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1xo45kp_di" bpmnElement="Event_1xo45kp">
+        <dc:Bounds x="852" y="232" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="836" y="275" width="69" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05vi757_di" bpmnElement="Activity_0e4hyoi">
+        <dc:Bounds x="540" y="70" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0535qej_di" bpmnElement="Activity_1i1g7cj">
+        <dc:Bounds x="540" y="210" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

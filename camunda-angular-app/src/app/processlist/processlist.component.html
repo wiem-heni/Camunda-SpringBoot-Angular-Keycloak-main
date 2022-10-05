@@ -1,0 +1,20 @@
+<div class="ui grid">
+  <div class="six wide column">
+    <div class="list-group">
+      <div *ngFor="let processDefinition of processDefinitions">
+        <button type="button" class="list-group-item list-group-item-action list-group-item-secondary" routerLink="/processlist/{{processDefinition.key}}">{{processDefinition.key}} - {{processDefinition.name}}</button>
+      </div>
+    </div>
+  </div>
+  <div class="ten wide column">
+
+    <div *ngIf="key != null && questions$ != null">
+      <h2>{{ key }}</h2>
+      <app-dynamic-form-start [key]="key" [questions]="questions$ | async"></app-dynamic-form-start>
+    </div>
+
+    <div *ngIf="!key">
+      <p>Start a process</p>
+    </div>
+  </div>
+</div>

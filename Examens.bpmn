@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0sj0v2s" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+  <bpmn:collaboration id="Examens">
+    <bpmn:documentation>Examens</bpmn:documentation>
+    <bpmn:participant id="Participant_1r6ofhg" name="Gestion Examens" processRef="Process_1l2ikj3" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_1l2ikj3" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_1xfpcc2">
+      <bpmn:lane id="Lane_1w0u4r6" name="Administration">
+        <bpmn:flowNodeRef>InformerElimination</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>VerificationEliminations</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_0ed8kd3</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>PreparationRelevesNotes</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>InviterExamens</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0kppj12</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_0ok3hde" name="Etudiant">
+        <bpmn:flowNodeRef>Gateway_1ceuwv6</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1yczmlc</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_0vyr63m</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1vq9r0k</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>PasserExamenControle</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NePasAssisterExamens</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_073m9sv</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_1rotypi</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>PasserExamen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1xul951</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1jhnszw</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_1t4gy73</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_11ayb0b</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_0gzueib</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_06m6quv" name="Enseignant">
+        <bpmn:flowNodeRef>CorrigerExamen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0g8jm0m</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:sequenceFlow id="Flow_0jhqycb" name="Etudiant redoublant" sourceRef="Gateway_1t4gy73" targetRef="Event_0gzueib">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{printer.verifFalse(execution)}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1yws2go" name="Etudiant admis" sourceRef="Gateway_1t4gy73" targetRef="Event_11ayb0b">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{printer.verifTrue(execution)}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1mel00f" sourceRef="Event_1jhnszw" targetRef="Gateway_1t4gy73" />
+    <bpmn:sequenceFlow id="Flow_0lo72el" name="Informer résultat session controle" sourceRef="Activity_0kppj12" targetRef="Event_1jhnszw" />
+    <bpmn:sequenceFlow id="Flow_0zfbr3b" sourceRef="PasserExamenControle" targetRef="Activity_0g8jm0m" />
+    <bpmn:sequenceFlow id="Flow_0fc4zk5" sourceRef="StartEvent_1" targetRef="VerificationEliminations" />
+    <bpmn:sequenceFlow id="Flow_06a5osi" sourceRef="VerificationEliminations" targetRef="Gateway_0ed8kd3" />
+    <bpmn:sequenceFlow id="Flow_0cr8t78" name="Etudiant éliminé" sourceRef="Gateway_0ed8kd3" targetRef="InformerElimination">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{printer.verifFalse(execution)}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1yu2syq" name="Etudiant non éliminé" sourceRef="Gateway_0ed8kd3" targetRef="InviterExamens">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{printer.verifTrue(execution)}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0rlhd0w" name="Assister examens" sourceRef="Gateway_1ceuwv6" targetRef="PasserExamen">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{printer.verifTrue(execution)}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0354092" name="Ne pas assister examens" sourceRef="Gateway_1ceuwv6" targetRef="NePasAssisterExamens">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{printer.verifFalse(execution)}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1eeg3eg" sourceRef="InviterExamens" targetRef="Event_1xul951" />
+    <bpmn:sequenceFlow id="Flow_156xfvh" sourceRef="Event_1xul951" targetRef="Gateway_1ceuwv6" />
+    <bpmn:sequenceFlow id="Flow_14xs281" sourceRef="PasserExamen" targetRef="CorrigerExamen" />
+    <bpmn:sequenceFlow id="Flow_16q2a95" sourceRef="CorrigerExamen" targetRef="PreparationRelevesNotes" />
+    <bpmn:sequenceFlow id="Flow_0sjwybc" name="Informer résultat session principale" sourceRef="PreparationRelevesNotes" targetRef="Event_073m9sv" />
+    <bpmn:sequenceFlow id="Flow_1pjluhb" sourceRef="Event_073m9sv" targetRef="Gateway_1rotypi" />
+    <bpmn:sequenceFlow id="Flow_1ice14p" name="Etudiant admis" sourceRef="Gateway_1rotypi" targetRef="Event_0vyr63m">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{printer.verifTrue(execution)}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0whlvbp" name="Etudiant redoublant" sourceRef="Gateway_1rotypi" targetRef="Event_1vq9r0k">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{printer.verifFalse(execution)}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_15wnwdi" sourceRef="Gateway_1rotypi" targetRef="PasserExamenControle">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{printer.verifFalse(execution)}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1dgxauy" sourceRef="InformerElimination" targetRef="Event_1yczmlc" />
+    <bpmn:sequenceFlow id="Flow_1j6xkto" sourceRef="Event_1yczmlc" targetRef="PasserExamenControle" />
+    <bpmn:sequenceFlow id="Flow_02on7ru" sourceRef="NePasAssisterExamens" targetRef="PasserExamenControle" />
+    <bpmn:endEvent id="Event_0gzueib">
+      <bpmn:incoming>Flow_0jhqycb</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="Event_11ayb0b">
+      <bpmn:incoming>Flow_1yws2go</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="Gateway_1t4gy73">
+      <bpmn:incoming>Flow_1mel00f</bpmn:incoming>
+      <bpmn:outgoing>Flow_1yws2go</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0jhqycb</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:intermediateThrowEvent id="Event_1jhnszw">
+      <bpmn:incoming>Flow_0lo72el</bpmn:incoming>
+      <bpmn:outgoing>Flow_1mel00f</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_11scotf" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:serviceTask id="Activity_0kppj12" name="Mise a jour relevés de notes" camunda:expression="#{printer.hello(execution)}">
+      <bpmn:incoming>Flow_103novc</bpmn:incoming>
+      <bpmn:outgoing>Flow_0lo72el</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:intermediateThrowEvent id="Event_1xul951">
+      <bpmn:incoming>Flow_1eeg3eg</bpmn:incoming>
+      <bpmn:outgoing>Flow_156xfvh</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_04yvrpn" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:serviceTask id="InviterExamens" name="Inviter Examens" camunda:expression="#{printer.hello(execution)}">
+      <bpmn:incoming>Flow_1yu2syq</bpmn:incoming>
+      <bpmn:outgoing>Flow_1eeg3eg</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="CorrigerExamen" name="Corriger Examen" camunda:formKey="Correction">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="cin" label="cin etudiant" type="long" />
+          <camunda:formField id="note" label="note" type="long" />
+          <camunda:formField id="remarques" label="remarques" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_14xs281</bpmn:incoming>
+      <bpmn:outgoing>Flow_16q2a95</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="PasserExamen" name="Passer Examen" camunda:formKey="Examen">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="cin" label="cin" type="long" />
+          <camunda:formField id="nom" label="nom" type="string" />
+          <camunda:formField id="prenom" label="prenom" type="string" />
+          <camunda:formField id="réponses" label="réponses" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0rlhd0w</bpmn:incoming>
+      <bpmn:outgoing>Flow_14xs281</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_1rotypi">
+      <bpmn:incoming>Flow_1pjluhb</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ice14p</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0whlvbp</bpmn:outgoing>
+      <bpmn:outgoing>Flow_15wnwdi</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="PreparationRelevesNotes" name="Préparation relevés de notes" camunda:expression="#{printer.hello(execution)}">
+      <bpmn:incoming>Flow_16q2a95</bpmn:incoming>
+      <bpmn:outgoing>Flow_0sjwybc</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:intermediateThrowEvent id="Event_073m9sv">
+      <bpmn:incoming>Flow_0sjwybc</bpmn:incoming>
+      <bpmn:outgoing>Flow_1pjluhb</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_145l414" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:userTask id="NePasAssisterExamens" name="Ne pas assister Examens">
+      <bpmn:incoming>Flow_0354092</bpmn:incoming>
+      <bpmn:outgoing>Flow_02on7ru</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="PasserExamenControle" name="Passer examen controle" camunda:formKey="ExamenControle">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="cin" label="cin" type="long" />
+          <camunda:formField id="nom" label="nom" type="string" />
+          <camunda:formField id="prenom" label="prenom" type="string" />
+          <camunda:formField id="reponses" label="réponses" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_15wnwdi</bpmn:incoming>
+      <bpmn:incoming>Flow_1j6xkto</bpmn:incoming>
+      <bpmn:incoming>Flow_02on7ru</bpmn:incoming>
+      <bpmn:outgoing>Flow_0zfbr3b</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics isSequential="true" />
+    </bpmn:userTask>
+    <bpmn:endEvent id="Event_1vq9r0k">
+      <bpmn:incoming>Flow_0whlvbp</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="Event_0vyr63m">
+      <bpmn:incoming>Flow_1ice14p</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:intermediateThrowEvent id="Event_1yczmlc">
+      <bpmn:incoming>Flow_1dgxauy</bpmn:incoming>
+      <bpmn:outgoing>Flow_1j6xkto</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1fyrp6z" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:startEvent id="StartEvent_1" name="Debut prepartion session examens">
+      <bpmn:outgoing>Flow_0fc4zk5</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:exclusiveGateway id="Gateway_0ed8kd3">
+      <bpmn:incoming>Flow_06a5osi</bpmn:incoming>
+      <bpmn:outgoing>Flow_0cr8t78</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1yu2syq</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="VerificationEliminations" name="Verification des eliminations" camunda:expression="#{printer.hello(execution)}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="Output_1h0ks87" />
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0fc4zk5</bpmn:incoming>
+      <bpmn:outgoing>Flow_06a5osi</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_1ceuwv6">
+      <bpmn:incoming>Flow_156xfvh</bpmn:incoming>
+      <bpmn:outgoing>Flow_0rlhd0w</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0354092</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="InformerElimination" name="Informer Elimination" camunda:expression="#{printer.hello(execution)}">
+      <bpmn:incoming>Flow_0cr8t78</bpmn:incoming>
+      <bpmn:outgoing>Flow_1dgxauy</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Activity_0g8jm0m" name="Corriger Examen Controle" camunda:formKey="CorrectionControle">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="cin" label="cin" type="long" />
+          <camunda:formField id="note" label="note" type="long" />
+          <camunda:formField id="remarques" label="remarques" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0zfbr3b</bpmn:incoming>
+      <bpmn:outgoing>Flow_103novc</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_103novc" sourceRef="Activity_0g8jm0m" targetRef="Activity_0kppj12" />
+    <bpmn:textAnnotation id="TextAnnotation_03i64gh">
+      <bpmn:text>L'enseignant corrige plusieurs examens</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="TextAnnotation_14hniu4">
+      <bpmn:text>L'étudiant passe plusieurs examens</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_0gvycyh" sourceRef="CorrigerExamen" targetRef="TextAnnotation_03i64gh" />
+    <bpmn:association id="Association_0wesnyb" sourceRef="PasserExamen" targetRef="TextAnnotation_14hniu4" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Examens">
+      <bpmndi:BPMNShape id="Participant_1r6ofhg_di" bpmnElement="Participant_1r6ofhg" isHorizontal="true">
+        <dc:Bounds x="186" y="80" width="1712" height="760" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_06m6quv_di" bpmnElement="Lane_06m6quv" isHorizontal="true">
+        <dc:Bounds x="216" y="80" width="1682" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_0ok3hde_di" bpmnElement="Lane_0ok3hde" isHorizontal="true">
+        <dc:Bounds x="216" y="530" width="1682" height="310" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_1w0u4r6_di" bpmnElement="Lane_1w0u4r6" isHorizontal="true">
+        <dc:Bounds x="216" y="280" width="1682" height="250" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_02on7ru_di" bpmnElement="Flow_02on7ru">
+        <di:waypoint x="1064" y="750" />
+        <di:waypoint x="1404" y="750" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1j6xkto_di" bpmnElement="Flow_1j6xkto">
+        <di:waypoint x="574" y="668" />
+        <di:waypoint x="574" y="820" />
+        <di:waypoint x="1454" y="820" />
+        <di:waypoint x="1454" y="770" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1dgxauy_di" bpmnElement="Flow_1dgxauy">
+        <di:waypoint x="574" y="510" />
+        <di:waypoint x="574" y="632" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_15wnwdi_di" bpmnElement="Flow_15wnwdi">
+        <di:waypoint x="1284" y="675" />
+        <di:waypoint x="1284" y="730" />
+        <di:waypoint x="1404" y="730" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0whlvbp_di" bpmnElement="Flow_0whlvbp">
+        <di:waypoint x="1309" y="650" />
+        <di:waypoint x="1436" y="650" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1333" y="616" width="53" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ice14p_di" bpmnElement="Flow_1ice14p">
+        <di:waypoint x="1284" y="625" />
+        <di:waypoint x="1284" y="570" />
+        <di:waypoint x="1436" y="570" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1303" y="553" width="73" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1pjluhb_di" bpmnElement="Flow_1pjluhb">
+        <di:waypoint x="1212" y="650" />
+        <di:waypoint x="1259" y="650" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0sjwybc_di" bpmnElement="Flow_0sjwybc">
+        <di:waypoint x="1194" y="407" />
+        <di:waypoint x="1194" y="632" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1196" y="476" width="88" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16q2a95_di" bpmnElement="Flow_16q2a95">
+        <di:waypoint x="1084" y="220" />
+        <di:waypoint x="1194" y="220" />
+        <di:waypoint x="1194" y="327" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14xs281_di" bpmnElement="Flow_14xs281">
+        <di:waypoint x="1034" y="610" />
+        <di:waypoint x="1034" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_156xfvh_di" bpmnElement="Flow_156xfvh">
+        <di:waypoint x="748" y="650" />
+        <di:waypoint x="819" y="650" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1eeg3eg_di" bpmnElement="Flow_1eeg3eg">
+        <di:waypoint x="730" y="407" />
+        <di:waypoint x="730" y="632" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0354092_di" bpmnElement="Flow_0354092">
+        <di:waypoint x="844" y="675" />
+        <di:waypoint x="844" y="750" />
+        <di:waypoint x="964" y="750" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="855" y="710" width="77" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0rlhd0w_di" bpmnElement="Flow_0rlhd0w">
+        <di:waypoint x="869" y="650" />
+        <di:waypoint x="984" y="650" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="880" y="632" width="87" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1yu2syq_di" bpmnElement="Flow_1yu2syq">
+        <di:waypoint x="599" y="367" />
+        <di:waypoint x="700" y="367" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="620" y="336" width="63" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0cr8t78_di" bpmnElement="Flow_0cr8t78">
+        <di:waypoint x="574" y="392" />
+        <di:waypoint x="574" y="430" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="550" y="408" width="79" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06a5osi_di" bpmnElement="Flow_06a5osi">
+        <di:waypoint x="474" y="367" />
+        <di:waypoint x="549" y="367" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fc4zk5_di" bpmnElement="Flow_0fc4zk5">
+        <di:waypoint x="312" y="367" />
+        <di:waypoint x="374" y="367" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0zfbr3b_di" bpmnElement="Flow_0zfbr3b">
+        <di:waypoint x="1504" y="730" />
+        <di:waypoint x="1560" y="730" />
+        <di:waypoint x="1560" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_103novc_di" bpmnElement="Flow_103novc">
+        <di:waypoint x="1610" y="230" />
+        <di:waypoint x="1660" y="230" />
+        <di:waypoint x="1660" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0lo72el_di" bpmnElement="Flow_0lo72el">
+        <di:waypoint x="1660" y="430" />
+        <di:waypoint x="1660" y="592" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1669" y="476" width="82" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1mel00f_di" bpmnElement="Flow_1mel00f">
+        <di:waypoint x="1678" y="610" />
+        <di:waypoint x="1735" y="610" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1yws2go_di" bpmnElement="Flow_1yws2go">
+        <di:waypoint x="1785" y="610" />
+        <di:waypoint x="1842" y="610" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1777" y="573" width="73" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0jhqycb_di" bpmnElement="Flow_0jhqycb">
+        <di:waypoint x="1760" y="635" />
+        <di:waypoint x="1760" y="720" />
+        <di:waypoint x="1842" y="720" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1773" y="686" width="53" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_0gubfuf_di" bpmnElement="InformerElimination">
+        <dc:Bounds x="524" y="430" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1ceuwv6_di" bpmnElement="Gateway_1ceuwv6" isMarkerVisible="true">
+        <dc:Bounds x="819" y="625" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1onmmym_di" bpmnElement="VerificationEliminations">
+        <dc:Bounds x="374" y="327" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0ed8kd3_di" bpmnElement="Gateway_0ed8kd3" isMarkerVisible="true">
+        <dc:Bounds x="549" y="342" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="276" y="349" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="251" y="392" width="86" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1n3eyza_di" bpmnElement="Event_1yczmlc">
+        <dc:Bounds x="556" y="632" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0vyr63m_di" bpmnElement="Event_0vyr63m">
+        <dc:Bounds x="1436" y="552" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1vq9r0k_di" bpmnElement="Event_1vq9r0k">
+        <dc:Bounds x="1436" y="632" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0x7a4a7_di" bpmnElement="PasserExamenControle">
+        <dc:Bounds x="1404" y="690" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_03v720m_di" bpmnElement="NePasAssisterExamens">
+        <dc:Bounds x="964" y="710" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1pveugj_di" bpmnElement="Event_073m9sv">
+        <dc:Bounds x="1176" y="632" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1szgkej_di" bpmnElement="PreparationRelevesNotes">
+        <dc:Bounds x="1144" y="327" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1rotypi_di" bpmnElement="Gateway_1rotypi" isMarkerVisible="true">
+        <dc:Bounds x="1259" y="625" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0hplyi2_di" bpmnElement="PasserExamen">
+        <dc:Bounds x="984" y="610" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0z89w2j_di" bpmnElement="CorrigerExamen">
+        <dc:Bounds x="984" y="180" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ti2430_di" bpmnElement="InviterExamens">
+        <dc:Bounds x="700" y="327" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_004hxxs_di" bpmnElement="Event_1xul951">
+        <dc:Bounds x="712" y="632" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_14hniu4_di" bpmnElement="TextAnnotation_14hniu4">
+        <dc:Bounds x="1064" y="542" width="100" height="55" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_03i64gh_di" bpmnElement="TextAnnotation_03i64gh">
+        <dc:Bounds x="1100" y="110" width="100" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1x0asl0_di" bpmnElement="Activity_0g8jm0m">
+        <dc:Bounds x="1510" y="180" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0kppj12_di" bpmnElement="Activity_0kppj12">
+        <dc:Bounds x="1610" y="350" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1upx8b8_di" bpmnElement="Event_1jhnszw">
+        <dc:Bounds x="1642" y="592" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1t4gy73_di" bpmnElement="Gateway_1t4gy73" isMarkerVisible="true">
+        <dc:Bounds x="1735" y="585" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_11ayb0b_di" bpmnElement="Event_11ayb0b">
+        <dc:Bounds x="1842" y="592" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0gzueib_di" bpmnElement="Event_0gzueib">
+        <dc:Bounds x="1842" y="702" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_0wesnyb_di" bpmnElement="Association_0wesnyb">
+        <di:waypoint x="1068" y="610" />
+        <di:waypoint x="1080" y="597" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0gvycyh_di" bpmnElement="Association_0gvycyh">
+        <di:waypoint x="1080" y="182" />
+        <di:waypoint x="1100" y="166" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

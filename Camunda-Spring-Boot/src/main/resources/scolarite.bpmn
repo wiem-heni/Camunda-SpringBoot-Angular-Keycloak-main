@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0">
+  <bpmn:process id="scolarite" name="scolarite" isExecutable="true" camunda:versionTag="scolarite">
+    <bpmn:endEvent id="EndEvent_0j97txi">
+      <bpmn:incoming>SequenceFlow_17w5nfr</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_17w5nfr" sourceRef="Task_1qgx3ke" targetRef="EndEvent_0j97txi" />
+    <bpmn:serviceTask id="Task_1qgx3ke" name="Lisence" camunda:expression="#{printer.printMessage(execution)}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="niveau">${niveau}</camunda:inputParameter>
+          <camunda:inputParameter name="cin">${cin}</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1s2pe3i</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_17w5nfr</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1cx6r7k" sourceRef="StartEvent_1" targetRef="Activity_05yc8j1" />
+    <bpmn:userTask id="Activity_05yc8j1" name="test1">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="cin" label="cin" type="string" />
+          <camunda:formField id="niveau" label="niveau" type="enum" defaultValue="Lisence">
+            <camunda:value id="Licence" name="Licence" />
+            <camunda:value id="Ingenierie" name="Ingenierie" />
+            <camunda:value id="Master" name="Master" />
+          </camunda:formField>
+        </camunda:formData>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="niveau">${niveau}</camunda:outputParameter>
+          <camunda:outputParameter name="cin">${cin}</camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1cx6r7k</bpmn:incoming>
+      <bpmn:outgoing>Flow_13knisd</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:startEvent id="StartEvent_1" name="SayHello" camunda:asyncAfter="true">
+      <bpmn:outgoing>Flow_1cx6r7k</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:exclusiveGateway id="Gateway_1x95dud" name="niveauVerification">
+      <bpmn:incoming>Flow_13knisd</bpmn:incoming>
+      <bpmn:outgoing>Flow_1q2ken4</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1s2pe3i</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_13knisd" sourceRef="Activity_05yc8j1" targetRef="Gateway_1x95dud" />
+    <bpmn:serviceTask id="Activity_09bsysa" name="Ingenierie" camunda:expression="#{printer.printMessageIng(execution)}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="niveau">${niveau}</camunda:inputParameter>
+          <camunda:inputParameter name="cin">${cin}</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1q2ken4</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ne31ed</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1q2ken4" name="Ingenierie" sourceRef="Gateway_1x95dud" targetRef="Activity_09bsysa">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${niveau=='Ingenierie'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Event_1xo45kp">
+      <bpmn:incoming>Flow_1ne31ed</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1ne31ed" sourceRef="Activity_09bsysa" targetRef="Event_1xo45kp" />
+    <bpmn:sequenceFlow id="Flow_1s2pe3i" name="lisence" sourceRef="Gateway_1x95dud" targetRef="Task_1qgx3ke">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{printer.verifLis(execution)}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+  </bpmn:process>
+  <bpmn:signal id="Signal_0bnb6yq" name="sayHello" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="scolarite">
+      <bpmndi:BPMNEdge id="Flow_1s2pe3i_di" bpmnElement="Flow_1s2pe3i">
+        <di:waypoint x="465" y="120" />
+        <di:waypoint x="510" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="470" y="102" width="35" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ne31ed_di" bpmnElement="Flow_1ne31ed">
+        <di:waypoint x="610" y="250" />
+        <di:waypoint x="682" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1q2ken4_di" bpmnElement="Flow_1q2ken4">
+        <di:waypoint x="440" y="145" />
+        <di:waypoint x="440" y="270" />
+        <di:waypoint x="510" y="270" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="445" y="205" width="49" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13knisd_di" bpmnElement="Flow_13knisd">
+        <di:waypoint x="360" y="120" />
+        <di:waypoint x="415" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1cx6r7k_di" bpmnElement="Flow_1cx6r7k">
+        <di:waypoint x="209" y="120" />
+        <di:waypoint x="260" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_17w5nfr_di" bpmnElement="SequenceFlow_17w5nfr">
+        <di:waypoint x="610" y="120" />
+        <di:waypoint x="682" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="423.5" y="100" width="90" height="10" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_0j97txi_di" bpmnElement="EndEvent_0j97txi">
+        <dc:Bounds x="682" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="549" y="143" width="0" height="10" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_1r5ywpa_di" bpmnElement="Task_1qgx3ke">
+        <dc:Bounds x="510" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ufdcn0_di" bpmnElement="Activity_05yc8j1">
+        <dc:Bounds x="260" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_05ny3du_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="173" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="126" y="138" width="45" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1x95dud_di" bpmnElement="Gateway_1x95dud" isMarkerVisible="true">
+        <dc:Bounds x="415" y="95" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="398" y="65" width="87" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_09bsysa_di" bpmnElement="Activity_09bsysa">
+        <dc:Bounds x="510" y="210" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1xo45kp_di" bpmnElement="Event_1xo45kp">
+        <dc:Bounds x="682" y="232" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

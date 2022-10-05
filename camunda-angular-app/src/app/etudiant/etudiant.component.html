@@ -1,0 +1,23 @@
+
+
+
+<div class="ui grid">
+    <h3>Etudiants Ingenieur : </h3>
+    <div class="list-group w-100">
+      <div *ngFor="let e of etudiantIng">
+        <button type="button" class="list-group-item list-group-item-action list-group-item-secondary">
+          {{ e.cin }} <span style="font-weight:bold;">{{ e.nom }} {{ e.prenom }}</span> &nbsp;&nbsp;&nbsp;&nbsp; - {{ e.niveau }} - Crédit : {{ e.credit }}
+        </button>
+      </div>
+    </div>
+
+    <h3>Etudiants Licence : </h3>
+    <div class="list-group w-100">
+      <div *ngFor="let e of etudiantLsc">
+        <button type="button" class="list-group-item list-group-item-action list-group-item-secondary">
+          {{ e.cin }} <span style="font-weight:bold;">{{ e.nom }} {{ e.prenom }}</span> &nbsp;&nbsp;&nbsp;&nbsp; - {{ e.niveau }}
+        </button>
+      </div>
+    </div>
+
+</div>

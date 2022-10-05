@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0sj0v2s" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+  <bpmn:process id="ExamenPrincipale" name="Passer Examen Principale" isExecutable="false">
+    <bpmn:startEvent id="StartEvent_1" name="Debut prepartion session examens">
+      <bpmn:outgoing>Flow_0fc4zk5</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="Event_0vyr63m">
+      <bpmn:incoming>Flow_16q2a95</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0fc4zk5" sourceRef="StartEvent_1" targetRef="PasserExamen" />
+    <bpmn:userTask id="PasserExamen" name="Passer Examen">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="cin" label="cin" type="long" />
+          <camunda:formField id="nom" label="nom" type="string" />
+          <camunda:formField id="prenom" label="prenom" type="string" />
+          <camunda:formField id="réponses" label="réponses" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0fc4zk5</bpmn:incoming>
+      <bpmn:outgoing>Flow_14xs281</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_14xs281" sourceRef="PasserExamen" targetRef="CorrigerExamen" />
+    <bpmn:userTask id="CorrigerExamen" name="Corriger Examen Principale">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="cin" label="cin etudiant" type="long" />
+          <camunda:formField id="note" label="note" type="long" />
+          <camunda:formField id="remarques" label="remarques" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_14xs281</bpmn:incoming>
+      <bpmn:outgoing>Flow_16q2a95</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_16q2a95" sourceRef="CorrigerExamen" targetRef="Event_0vyr63m" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="ExamenPrincipale">
+      <bpmndi:BPMNEdge id="Flow_14xs281_di" bpmnElement="Flow_14xs281">
+        <di:waypoint x="430" y="120" />
+        <di:waypoint x="520" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16q2a95_di" bpmnElement="Flow_16q2a95">
+        <di:waypoint x="620" y="120" />
+        <di:waypoint x="692" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fc4zk5_di" bpmnElement="Flow_0fc4zk5">
+        <di:waypoint x="238" y="120" />
+        <di:waypoint x="330" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="CorrigerExamen_di" bpmnElement="CorrigerExamen">
+        <dc:Bounds x="520" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="PasserExamen_di" bpmnElement="PasserExamen">
+        <dc:Bounds x="330" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0vyr63m_di" bpmnElement="Event_0vyr63m">
+        <dc:Bounds x="692" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="202" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="177" y="145" width="86" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

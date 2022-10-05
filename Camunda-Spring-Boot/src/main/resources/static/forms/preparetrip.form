@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 2,
+  "components": [
+    {
+      "key": "firstname",
+      "label": "First Name",
+      "type": "textfield",
+      "validate": {
+        "required": true,
+        "pattern": "^(?:0|[1-9][0-9]*)\\.[0-9]+$"
+      },
+      "description": "How much cash do you want to bring?",
+      "id": "Field_1fl89mb"
+    },
+    {
+      "key": "lastname",
+      "label": "Lastname",
+      "type": "textfield",
+      "description": "Country to start a revolution",
+      "validate": {
+        "required": true,
+        "pattern": "America|France"
+      },
+      "id": "Field_109ojib"
+    }
+  ],
+  "type": "default",
+  "id": "Form_0tt2a8m"
+}

@@ -1,0 +1,55 @@
+spring.datasource:
+  url: jdbc:h2:file:./camunda-h2-database-v14;MVCC=TRUE;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
+#shareable h2 database: jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;MVCC=TRUE;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
+
+
+spring:
+  jersey:
+    application-path: engine-rest
+
+camunda.bpm:
+  history-level: audit
+  authorization:
+    enabled: True
+  filter:
+    create: All tasks
+
+server:
+  port: 8081
+  servlet.context-path: /camunda
+
+
+
+security:
+  oauth2:
+    client:
+      client-id: camunda-id-service
+      client-secret: qQzcjoXIkqwTTHbpo6iamT9wXx7320VD
+      accessTokenUri: http://localhost:8080/auth/realms/camundaid/protocol/openid-connect/token
+      userAuthorizationUri: http://localhost:8080/auth/realms/camundaid/protocol/openid-connect/auth
+      scope: openid profile email
+    resource:
+      userInfoUri: http://localhost:8080/auth/realms/camundaid/protocol/openid-connect/userinfo
+
+
+plugin.identity.keycloak:
+  keycloakIssuerUrl: http://localhost:8080/auth/realms/camundaid
+  keycloakAdminUrl: http://localhost:8080/auth/admin/realms/camundaid
+  clientId: camunda-id-service
+  clientSecret: qQzcjoXIkqwTTHbpo6iamT9wXx7320VD
+  useEmailAsCamundaUserId: true
+  administratorGroupName: camunda-admin
+
+
+endpoints.cors.allow-credentials : true
+endpoints.cors.allowed-origins : http://localhost:4200
+endpoints.cors.allowed-methods : GET, POST, PUT
+endpoints.cors.allowed-headers : '*'
+
+
+
+
+
+
+
+

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0stsh5p" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+  <bpmn:process id="Examen" name="Examen" isExecutable="true">
+    <bpmn:userTask id="PasserExamenPrincipale" name="Corriger Examen Principale">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="cin" label="cin" type="long" />
+          <camunda:formField id="note" label="note" type="string" />
+          <camunda:formField id="remarques" label="remarques" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1lcl3uy</bpmn:incoming>
+      <bpmn:outgoing>Flow_1iofelc</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="Event_0ga5wey">
+      <bpmn:incoming>Flow_1iofelc</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1iofelc" sourceRef="PasserExamenPrincipale" targetRef="Event_0ga5wey" />
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1lcl3uy</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1lcl3uy" sourceRef="StartEvent_1" targetRef="PasserExamenPrincipale" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Examen">
+      <bpmndi:BPMNEdge id="Flow_1lcl3uy_di" bpmnElement="Flow_1lcl3uy">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="270" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1iofelc_di" bpmnElement="Flow_1iofelc">
+        <di:waypoint x="370" y="117" />
+        <di:waypoint x="432" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0ga5wey_di" bpmnElement="Event_0ga5wey">
+        <dc:Bounds x="432" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0kklurr_di" bpmnElement="PasserExamenPrincipale">
+        <dc:Bounds x="270" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

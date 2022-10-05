@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1vhykgi" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+  <bpmn:process id="EtapesTest" name="Etapes Test" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" camunda:formKey="Formulaire debut">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="username" label="username" type="string" />
+          <camunda:formField id="email" label="email" type="string" />
+          <camunda:formField id="tache" label="tache" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_1mcwuwo</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1mcwuwo" sourceRef="StartEvent_1" targetRef="Etape1" />
+    <bpmn:sequenceFlow id="Flow_18a2mu2" sourceRef="Etape1" targetRef="Etape2" />
+    <bpmn:sequenceFlow id="Flow_04ixn2q" sourceRef="Etape2" targetRef="Etape3" />
+    <bpmn:endEvent id="Event_0qxqyrv">
+      <bpmn:incoming>Flow_1cuqlmi</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1cuqlmi" sourceRef="Etape3" targetRef="Event_0qxqyrv" />
+    <bpmn:userTask id="Etape1" name="Etape 1" camunda:formKey="Formulaire Etape 1">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="nom" label="nom" type="string" />
+          <camunda:formField id="prenom" label="prenom" type="string" />
+          <camunda:formField id="age" label="age" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1mcwuwo</bpmn:incoming>
+      <bpmn:outgoing>Flow_18a2mu2</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Etape2" name="Etape 2" camunda:formKey="Formulaire Etape 2">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="adresse" label="adresse" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_18a2mu2</bpmn:incoming>
+      <bpmn:outgoing>Flow_04ixn2q</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Etape3" name="Etape 3" camunda:formKey="Formulaire Etape 3">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="poste" label="poste" type="string" />
+          <camunda:formField id="societe" label="societe" type="string" />
+          <camunda:formField id="specialite" label="specialite" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_04ixn2q</bpmn:incoming>
+      <bpmn:outgoing>Flow_1cuqlmi</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="EtapesTest">
+      <bpmndi:BPMNEdge id="Flow_1mcwuwo_di" bpmnElement="Flow_1mcwuwo">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="270" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_18a2mu2_di" bpmnElement="Flow_18a2mu2">
+        <di:waypoint x="370" y="117" />
+        <di:waypoint x="430" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_04ixn2q_di" bpmnElement="Flow_04ixn2q">
+        <di:waypoint x="530" y="117" />
+        <di:waypoint x="590" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1cuqlmi_di" bpmnElement="Flow_1cuqlmi">
+        <di:waypoint x="690" y="117" />
+        <di:waypoint x="752" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0qxqyrv_di" bpmnElement="Event_0qxqyrv">
+        <dc:Bounds x="752" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ct2k4j_di" bpmnElement="Etape1">
+        <dc:Bounds x="270" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0zas265_di" bpmnElement="Etape2">
+        <dc:Bounds x="430" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0l912ut_di" bpmnElement="Etape3">
+        <dc:Bounds x="590" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

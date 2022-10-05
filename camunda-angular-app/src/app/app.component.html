@@ -1,0 +1,38 @@
+<div class="h-100 overflow-hidden">
+    <div class="col-md-12 d-flex justify-content-center shadow mb-2" style="background:#ed4242;border:1px solid #ed4242;">
+        <div style="width:69%;">
+                <ul class="nav mt-2" role="tablist">
+                    <li class="d-flex w-75">
+                        <div class="nav-item nav-item-first w-25">
+                            <a routerLink="/home" [routerLinkActive]="['active']" class="nav-link p-3">Home</a>
+                        </div>
+                        <div class="nav-item w-25">
+                            <a routerLink="/processlist" [routerLinkActive]="['active']" class="nav-link p-3"><i class="fa fa-play" aria-hidden="true"></i>&nbsp;&nbsp; Start process</a>
+                        </div>
+                        <div class="nav-item w-25">
+                            <a routerLink="/tasklist" [routerLinkActive]="['active']" class="nav-link p-3"><i class="fa fa-tasks" aria-hidden="true"></i>&nbsp;&nbsp; Tasklist</a>
+                        </div>
+                        <div class="nav-item w-25">
+                            <a routerLink="/etudiant" [routerLinkActive]="['active']" class="nav-link p-3"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp; Etudiant</a>
+                        </div>
+                    </li>
+                    
+                    <li class="d-flex flex-row-reverse w-25">
+                        <a (click)="logout()" [routerLinkActive]="['active']" class="nav-link p-3">Logout <i class="fa fa-sign-out" style="font-size:107%"></i> </a>
+                    </li>
+                </ul>
+        </div>
+    </div>
+    <div class="col-md-12 d-flex justify-content-center mt-2">
+            <div class="container w-75 pt-3" style="height:86.5vh;border: 1.25px solid #43141411;background:#43141403;">
+              <router-outlet></router-outlet>
+            </div>
+        </div>
+<div>
+
+
+
+
+
+
+
